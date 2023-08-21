@@ -29,7 +29,7 @@ transfers: spec=TransferService-v4
 # BalanceWebhooks
 configurationWebhooks: spec=BalancePlatformConfigurationNotification-v1
 reportWebhooks: spec=BalancePlatformReportNotification-v1
-transferWebhooks: spec=BalancePlatformTransferNotification-v3
+transferWebhooks: spec=BalancePlatformTransferNotification-v4
 
 $(services): build/spec $(openapi-generator-jar)  
 	rm -rf src/typings/$@ build/model
