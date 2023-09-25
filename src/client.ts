@@ -1,7 +1,7 @@
 import Config from "./config";
 import HttpURLConnectionClient from "./httpClient/httpURLConnectionClient";
 import { version } from "../package.json";
-import ClientInterface from "./httpClient/clientInterface";
+import ClientInterface from "./httpClient/clientInterface";//asdasdasd
 
 type ClientParametersOverload =
 | { config: Config }
