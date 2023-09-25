@@ -1,16 +1,20 @@
-name: Github Release
+name: Automatic Github release
 
 on:
-    workflow_dispatch:
-    push:
-      branches:
-        - main
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+    paths:
+      - VERSION
 
 jobs:
-  gh_release:
+  github:
     permissions:
       contents: write
-    uses: ./.github/workflows/lib-gh-release.yml
+    uses: aleffio/release-automation-action/.github/workflows/reusable-github-release.yml@v1.0.13
     with:
-      project-name: Node
-    secrets: inherit
+      release-title: Adyen Node API Library
+      develop-branch: develop
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

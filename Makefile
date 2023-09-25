@@ -4,7 +4,7 @@ openapi-generator-url:=https://repo1.maven.org/maven2/org/openapitools/openapi-g
 openapi-generator-jar:=build/openapi-generator-cli.jar
 openapi-generator-cli:=java -jar $(openapi-generator-jar)
 
-services:=acsWebhooks balanceControl balancePlatform binLookup checkout configurationWebhooks dataProtection legalEntityManagement management managementWebhooks payment payout recurring reportWebhooks storedValue terminalManagement transfers transferWebhooks
+services:=balanceControl balancePlatform binLookup checkout configurationWebhooks dataProtection legalEntityManagement management payment payout recurring reportWebhooks storedValue terminalManagement transfer transferWebhooks
 
 # Generate models (for each service)
 models: $(services)
@@ -26,16 +26,12 @@ platformsFund: spec=FundService-v6
 platformsNotificationConfiguration: spec=NotificationConfigurationService-v6
 platformsHostedOnboardingPage: spec=HopService-v6
 transfers: spec=TransferService-v3
-
 # BalanceWebhooks
-acsWebhooks: spec=BalancePlatformAcsNotification-v1
 configurationWebhooks: spec=BalancePlatformConfigurationNotification-v1
 reportWebhooks: spec=BalancePlatformReportNotification-v1
 transferWebhooks: spec=BalancePlatformTransferNotification-v3
-# ManagementWebhooks
-managementWebhooks: spec=ManagementNotificationService-v1
 
-$(services): build/spec $(openapi-generator-jar)  
+$(services): build/spec $(openapi-generator-jar)
 	rm -rf src/typings/$@ build/model
 	$(openapi-generator-cli) generate \
 		-i build/spec/json/$(spec).json \
@@ -77,7 +73,7 @@ $(services): build/spec $(openapi-generator-jar)
 $(singleFileServices): build/spec $(openapi-generator-jar)
 	rm -rf src/typings/$@ build/model src/services/$@
 	jq -e 'del(.paths[][].tags)' build/spec/json/$(spec).json > build/spec/json/$(spec).tmp
-	mv build/spec/json/$(spec).tmp build/spec/json/$(spec).json 
+	mv build/spec/json/$(spec).tmp build/spec/json/$(spec).json
 	$(openapi-generator-cli) generate \
 		-i build/spec/json/$(spec).json \
 		-g $(generator) \
@@ -111,11 +107,4 @@ clean:
 	git checkout src/typings src/services/management
 	git clean -f -d src/typings src/services/management
 
-## Release
-version:
-	echo currentVersion=$$(node -pe "require('./package.json').version") >> "$$GITHUB_OUTPUT"
-
-bump:
-	npm --no-git-tag-version version "$$NEXT_VERSION"
-
-.PHONY: templates models $(services) version bump
+.PHONY: templates models $(services)
